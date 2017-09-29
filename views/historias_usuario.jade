@@ -100,42 +100,6 @@ html
       padding: 0;
       }
     script(type='text/javascript').
-      /*function AudioEnd(){
-      //alert("Termino el sonido");
-      var id_tarjeta = parseInt(sessionStorage.getItem('id_tarjeta'));
-      if(sessionStorage.getItem('tarjetaActiva')==2){
-      FinaldeEncuentro();
-      }
-      }
-      function iniciarTimer() {
-      $('#timer').pietimer({
-      timerSeconds: 0,
-      fill: false,
-      showPercentage: true,
-      callback: function() {
-      if ( parseInt(sessionStorage.getItem('cambioSelect')) == 1) {
-      Salir();
-      var audio = document.getElementById('audio');
-      audio.play();
-      /*audio.onended(function () {
-      alert("Termino el sonido");
-      if(id_tarjeta == obj.cards.length){
-      FinaldeEncuentro();
-      }
-      });*/
-      /* $('#tarjeta').on('outAnimationEnd.tlt', function () {
-      obtenerSiguienteTarjeta();
-      });
-      }
-      //$('#timer').pietimer('reset');
-      }
-      });
-      }
-      function iniciar2Timer(){
-      $('#timer').pietimer('reset');
-      $('#timer').pietimer('start', document.getElementById('tiempotxt').value*60);
-      }*/
-    script.
       function AuthenticateTrello() {
       Trello.authorize({
       name: "Innovacion27",
@@ -148,14 +112,16 @@ html
       });
       sessionStorage.setItem('cambioSelect', 0);
       }
+    script(type='text/javascript').
       function onAuthorizeSuccessful() {
-      //	localStorage.clear();
-      //	sessionStorage.clear();
+      //  localStorage.clear();
+      //  sessionStorage.clear();
       var token = Trello.token();
       sessionStorage.setItem('token', token);
       var t = sessionStorage.getItem('token');
       }
-      function getListas(){
+    script.
+      function getListas() {
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.open( "GET", "https://trello.com/1/boards/586cfa0ddfb93cfbe4bcb6ec/lists?fields=name&key=348c82030c3508da85a953138c86ae34&token="+sessionStorage.getItem('token'), false );
       xmlHttp.send( null );
@@ -170,16 +136,12 @@ html
       }
       }
     script(type='text/javascript').
-      function guardar(id_lista){
-      var newCard =
-      {name: "En el rol de: "+document.getElementById("rol").text +"necesito "+ document.getElementById("necesito").text +"para"+ document.getElementById("para").text,
-      desc: "",
-      pos: "bottom",
-      idList: id_lista
-      };
-      Trello.post('/cards/', newCard, success, error);
-      var success = function(successMsg) { console.log(" your actions on success case ")}
-      var error= function(errorMsg) { console.log(" your actions on error case ") }
+      function guardar(){
+      var id_lista = document.getElementById("listas").options[document.getElementById("listas").selectedIndex].value;
+      var name= "En el rol de: "+document.getElementById("rol").text +"necesito "+ document.getElementById("necesito").text +"para"+ document.getElementById("para").text;
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("POST","https://api.trello.com/1/lists/{"+id_lista"+}/cards?name={"+name+"}&desc{""}&key={348c82030c3508da85a953138c86ae34}&token={"+sessionStorage.getItem('token')+"}");
+      xmlHttp.send( null );
       }
   body.header(onload='AuthenticateTrello(); getListas();')
     table(align='center')
@@ -202,4 +164,4 @@ html
           label Listas: 
           select#listas
         td(align='center', colspan='3')
-          button(onclick='guardar(document.getElementById(') Guardar
+          button(onclick='guardar()') Guardar
