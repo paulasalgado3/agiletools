@@ -103,12 +103,12 @@ html
       function AuthenticateTrello() {
       Trello.authorize({
       name: "Innovacion27",
-      type: "redirect",
+      type: "popup",
       interactive: true,
       expiration: "never",
       persist: true,
       success: function () { onAuthorizeSuccessful(); },
-      scope: { write: false, read: true },
+      scope: { write: true, read: true },
       });
       sessionStorage.setItem('cambioSelect', 0);
       }
@@ -135,33 +135,41 @@ html
       listas.add(opcion);
       }
       }
-    script(type='text/javascript').
+    script.
       function guardar(){
-      var id_lista = document.getElementById("listas").options[document.getElementById("listas").selectedIndex].value;
-      var name= "En el rol de: "+document.getElementById("rol").text +"necesito "+ document.getElementById("necesito").text +"para"+ document.getElementById("para").text;
+      var selected_index = document.getElementById("listas").selectedIndex;
+      var id_lista = document.getElementById("listas").options[selected_index].value;
+      var name= "En el rol de "+document.getElementById("rol").value +"necesito "+ document.getElementById("necesito").value +"para"+ document.getElementById("para").value;
       var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("POST","https://api.trello.com/1/lists/{"+id_lista"+}/cards?name={"+name+"}&desc{""}&key={348c82030c3508da85a953138c86ae34}&token={"+sessionStorage.getItem('token')+"}");
+      var string_post = "https://api.trello.com/1/lists/"+id_lista+"/cards?name="+name+"&key=348c82030c3508da85a953138c86ae34&token="+sessionStorage.getItem('token');
+      console.log(string_post);
+      xmlHttp.open("POST",string_post, false);
       xmlHttp.send( null );
       }
   body.header(onload='AuthenticateTrello(); getListas();')
-    table(align='center')
+    table(align='center', style='width:98%; height:98%')
       tr
-        td(align='center')
-          label En el rol de: 
-        td(align='center')
+        td(align='center', style='font-size: 4vw; width:30%')
+          label(style='') En el rol de: 
+        td(align='center', style='font-size: 4vw; width:40%')
           label Necesito: 
-        td(align='center')
+        td(align='center', style='font-size: 4vw; width:30%')
           label Para: 
       tr
-        td
-          textarea#rol   
-        td
-          textarea#necesito  
-        td
-          textarea#para  
+        td(align='center')
+          textarea#rol(style='width:90%; font-size: 2vw' , rows='3')   
+        td(align='center')
+          textarea#necesito(style='width:90%; font-size: 2vw' , rows='3')  
+        td(align='center')
+          textarea#para(style='width:90%; font-size: 2vw' , rows='3')  
       tr
-        td(align='center', colspan='3')
+        td
+        td(align='center')
           label Listas: 
           select#listas
-        td(align='center', colspan='3')
-          button(onclick='guardar()') Guardar
+        td
+      tr
+        td
+        td(align='center')
+          button(onclick='guardar();') Guardar
+        td
