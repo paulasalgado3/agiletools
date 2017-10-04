@@ -11,6 +11,13 @@ html
     link(rel='stylesheet', type='text/css', href='./timer/pietimer.css')
     script(type='text/javascript', src='./timer/jquery.pietimer.js')
     style.
+      #complete {
+      width:4em;
+      height:4em;
+      display:none;
+      background-image:url(./complete.png);
+      background-size:100% 100%;
+      }
       @font-face {
       font-family: 'Raleway';
       src: url('./font/Raleway-Regular.ttf');
@@ -139,12 +146,21 @@ html
       function guardar(){
       var selected_index = document.getElementById("listas").selectedIndex;
       var id_lista = document.getElementById("listas").options[selected_index].value;
-      var name= "En el rol de "+document.getElementById("rol").value +"necesito "+ document.getElementById("necesito").value +"para"+ document.getElementById("para").value;
+      var name= "En el rol de"+document.getElementById("rol").value +" necesito "+ document.getElementById("necesito").value +" para"+ document.getElementById("para").value;
       var xmlHttp = new XMLHttpRequest();
       var string_post = "https://api.trello.com/1/lists/"+id_lista+"/cards?name="+name+"&key=348c82030c3508da85a953138c86ae34&token="+sessionStorage.getItem('token');
       console.log(string_post);
       xmlHttp.open("POST",string_post, false);
       xmlHttp.send( null );
+      $(document).ready(function(){
+      
+      $("#complete").fadeIn("slow");
+      $("#complete").fadeOut("slow");
+      
+      });
+      document.getElementById("rol").value="";
+      document.getElementById("necesito").value="";
+      document.getElementById("para").value="";
       }
   body.header(onload='AuthenticateTrello(); getListas();')
     table(align='center', style='width:98%; height:98%')
@@ -157,11 +173,11 @@ html
           label Para: 
       tr
         td(align='center')
-          textarea#rol(style='width:90%; font-size: 2vw' , rows='3')   
+          textarea#rol(style='width:90%; font-size: 2vw', rows='3')   
         td(align='center')
-          textarea#necesito(style='width:90%; font-size: 2vw' , rows='3')  
+          textarea#necesito(style='width:90%; font-size: 2vw', rows='3')  
         td(align='center')
-          textarea#para(style='width:90%; font-size: 2vw' , rows='3')  
+          textarea#para(style='width:90%; font-size: 2vw', rows='3')  
       tr
         td
         td(align='center')
@@ -171,5 +187,10 @@ html
       tr
         td
         td(align='center')
-          button(onclick='guardar();') Guardar
+          table
+            tr
+              td
+                button#guardar(onclick='guardar();', style='width:100%') Guardar
+              td(style="width:4em;height:4em")
+                #complete
         td
